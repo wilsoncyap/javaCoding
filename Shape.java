@@ -5,10 +5,11 @@ import java.lang.Math;
 
 public class Shape 
 {
+	//All seven tetris shapes and the empty shape called NoShape
 	enum Tetrominoes {NoShape, ZShape, SShape, LineShape, TShape, SquareShape, LShape, MirroredShape };
 	
 	private Tetrominoes pieceShape;
-	private int coords[][];
+	private int coords[][]; //Actual coordinates of a Tetris piece
 	private int[][][] coordsTable;
 	
 	
@@ -18,6 +19,7 @@ public class Shape
 	}
 	public void setShape(Tetrominoes shape) 
 	{
+		//All possible coordinate values of Tetris pieces.
 		coordsTable = new int[][][] {
             { { 0, 0 },   { 0, 0 },   { 0, 0 },   { 0, 0 } },
             { { 0, -1 },  { 0, 0 },   { -1, 0 },  { -1, 1 } },
@@ -28,7 +30,9 @@ public class Shape
             { { -1, -1 }, { 0, -1 },  { 0, 0 },   { 0, 1 } },
             { { 1, -1 },  { 0, -1 },  { 0, 0 },   { 0, 1 } }
         };
-		
+		//Put one row of the coordinate values from the coodTable to a coords
+        //array of a tetris piece
+        //ordinal() returns the current position of the piece
         for (int i = 0; i < 4; i++) {
         	for(int j = 0; j <2; ++j) {
         		coords[i][j] = coordsTable[shape.ordinal()][i][j];

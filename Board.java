@@ -14,7 +14,9 @@ import javax.swing.Timer;
 
 import tetris.Shape.Tetrominoes;
 
-
+/*
+ * Houses the game logic and cycle
+ */
 public class Board extends JPanel implements ActionListener {
 
 
@@ -46,7 +48,9 @@ public class Board extends JPanel implements ActionListener {
        addKeyListener(new TAdapter());
        clearBoard();  
     }
-
+    
+    //Checks if the piece is finished falling,
+    //if so then creates a new piece, else move the piece down one line
     public void actionPerformed(ActionEvent e) {
         if (isFallingFinished) {
             isFallingFinished = false;
@@ -99,7 +103,8 @@ public class Board extends JPanel implements ActionListener {
         Dimension size = getSize();
         int boardTop = (int) size.getHeight() - BoardHeight * squareHeight();
 
-
+        //Paints all the shapes, or remains of shapes.
+        //All the squares are remembered in the board array.
         for (int i = 0; i < BoardHeight; ++i) {
             for (int j = 0; j < BoardWidth; ++j) {
                 Tetrominoes shape = shapeAt(j, BoardHeight - i - 1);
@@ -108,7 +113,8 @@ public class Board extends JPanel implements ActionListener {
                                boardTop + i * squareHeight(), shape);
             }
         }
-
+        
+        //Paints the actual falling piece
         if (curPiece.getShape() != Tetrominoes.NoShape) {
             for (int i = 0; i < 4; ++i) {
                 int x = curX + curPiece.x(i);
@@ -119,7 +125,7 @@ public class Board extends JPanel implements ActionListener {
             }
         }
     }
-
+    //If spacebar is pressed, drop piece to bottom
     private void dropDown()
     {
         int newY = curY;
@@ -131,19 +137,22 @@ public class Board extends JPanel implements ActionListener {
         pieceDropped();
     }
 
+    //If D key is pressed, piece is one line down
     private void oneLineDown()
     {
         if (!tryMove(curPiece, curX, curY - 1))
             pieceDropped();
     }
 
-
+    //Fills the board with empty NoShapes
     private void clearBoard()
     {
         for (int i = 0; i < BoardHeight * BoardWidth; ++i)
             board[i] = Tetrominoes.NoShape;
     }
 
+    //Puts falling piece into the board array.
+    //When piece is finished falling, checks if it can remove some lines off the board.
     private void pieceDropped()
     {
         for (int i = 0; i < 4; ++i) {
@@ -158,6 +167,9 @@ public class Board extends JPanel implements ActionListener {
             newPiece();
     }
 
+    //Creates a new random shape.
+    //Computes the current X and Y values
+    //If the piece can't move to the initial positions, game over.
     private void newPiece()
     {
         curPiece.setRandomShape();
@@ -172,6 +184,8 @@ public class Board extends JPanel implements ActionListener {
         }
     }
 
+    //Method to move piece, returns false if blocked by board boundaries
+    //or by adjacent fallen tetris pieces.
     private boolean tryMove(Shape newPiece, int newX, int newY)
     {
         for (int i = 0; i < 4; ++i) {
@@ -190,6 +204,8 @@ public class Board extends JPanel implements ActionListener {
         return true;
     }
 
+    //Checks if there is any full row among all rows in the board.
+    //Removes full lines. Move lines above the removed full lines one line down
     private void removeFullLines()
     {
         int numFullLines = 0;
@@ -222,6 +238,9 @@ public class Board extends JPanel implements ActionListener {
         }
      }
 
+    //Each Tetris piece has four squares. There's different colors for each shape
+    //3D edge is simulated by drawing the left and top squares with brighter colors,
+    //while bottom and right sides are drawn with darker colors.
     private void drawSquare(Graphics g, int x, int y, Tetrominoes shape)
     {
         Color colors[] = { new Color(0, 0, 0), new Color(204, 102, 102), 
@@ -246,7 +265,8 @@ public class Board extends JPanel implements ActionListener {
         g.drawLine(x + squareWidth() - 1, y + squareHeight() - 1,
                          x + squareWidth() - 1, y + 1);
     }
-
+    
+    //Keyboard controls
     class TAdapter extends KeyAdapter {
          public void keyPressed(KeyEvent e) {
 
