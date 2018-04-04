@@ -7,7 +7,7 @@ Left and Right Arrow move piece left and right.
 
 Up Arrow rotates piece counterclockwise.
 
-DOwn Arrow rotates piece clockwise.
+Down Arrow rotates piece clockwise.
 
 D key moves piece one line down.
 
